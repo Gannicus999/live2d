@@ -16,6 +16,40 @@
                 background-size: cover;
             }
         </style>
+        <style>
+            .live2d-widget-dialog-container {
+              width: 300px;
+              height: 120px;
+              position: absolute;
+              /* bottom: 65%; */
+              top: 10%;
+              right: 0px;
+              transform-origin: right;
+              padding: 12px;
+              box-sizing: border-box;
+              -webkit-font-smoothing: antialiased;
+            }
+            .live2d-widget-dialog {
+              width: 100%;
+              height: 100%;
+              color: #917159;
+              font-size: 16px;
+              padding: 12px;
+              border: 2px solid rgb(236, 203, 180);
+              background: rgb(252, 248, 244);
+              box-sizing: border-box;
+              border-radius: 10px;
+              transform: rotate(-2deg);
+              opacity: 0;
+              transition: 200ms opacity;
+              box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 6px, rgba(61, 43, 43, 0.12) 0px 1px 4px;
+              animation: live2d-widget-dialog-tingle 4s ease-in-out 0s infinite alternate;
+            }
+            @keyframes live2d-widget-dialog-tingle {
+              0% { transform: translate(-1px, 1.5px) rotate(-2deg); }
+              100% { transform: translate(1px, -1.5px) rotate(2deg); }
+            }
+          </style>
     </head>
     <body>
         <!-- <script src="https://cdn.jsdelivr.net/gh/stevenjoezhang/live2d-widget@latest/autoload.js"></script> -->
@@ -26,14 +60,33 @@
             var height = window.innerHeight -20;
             var width = height/4*3;
             var left = (window.innerWidth - width)/2;
-            L2Dwidget.init({"display": {
+            L2Dwidget
+            .on('*', (name) => {
+                console.log('%c EVENT ' + '%c -> ' + name, 'background: #222; color: yellow', 'background: #fff; color: #000')
+                })
+            .init({"display": {
                 "superSample": 2,
                 "width": width,
                 "height": height,
                 "position": "right",
                 "hOffset": left,
                 "vOffset": 0
-                  }
+                  },
+                  "dialog": {
+                    // 开启对话框
+                    enable: true,
+                    script: {
+                    // 每空闲 10 秒钟，显示一条一言
+                    'every idle 10s': '$hitokoto$',
+                    // 当触摸到星星图案
+                    'hover .star': '星星在天上而你在我心里 (*/ω＼*)',
+                    // 当触摸到角色身体
+                    'tap body': '哎呀！别碰我！',
+                    // 当触摸到角色头部
+                    'tap face': '人家已经不是小孩子了！',
+                    "hover body": "儿子！叫爸爸"
+                    }
+                 }
              });
         </script>
 
